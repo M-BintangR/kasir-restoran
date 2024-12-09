@@ -23,13 +23,31 @@ class AdminPanelProvider extends PanelProvider
     public function panel(Panel $panel): Panel
     {
         return $panel
+            // REQUIRED
             ->default()
             ->id('admin')
             ->path('admin')
             ->login()
+
+            // CUSTOM
             ->colors([
+                'danger' => Color::Red,
+                'gray' => Color::Slate,
+                'info' => Color::Blue,
                 'primary' => Color::Lime,
+                'success' => Color::Emerald,
+                'warning' => Color::Orange,
             ])
+            ->navigationGroups([
+                'Master',
+            ])
+            ->brandLogo(asset('ryoogen/logo-ryoogen-light.svg'))
+            ->darkModeBrandLogo(asset('ryoogen/logo-ryoogen-dark.svg'))
+            ->favicon(asset('ryoogen/favicon.ico'))
+            ->brandLogoHeight(1)
+            ->spa()
+
+            // NOT CUSTOM
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\\Filament\\Resources')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\\Filament\\Pages')
             ->pages([
@@ -40,10 +58,6 @@ class AdminPanelProvider extends PanelProvider
                 Widgets\AccountWidget::class,
                 Widgets\FilamentInfoWidget::class,
             ])
-            ->navigationGroups([
-                'Master',
-            ])
-            ->spa()
             ->middleware([
                 EncryptCookies::class,
                 AddQueuedCookiesToResponse::class,
