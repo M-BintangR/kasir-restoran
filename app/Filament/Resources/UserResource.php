@@ -16,6 +16,9 @@ use Filament\Resources\Resource;
 use Filament\Support\Enums\Alignment;
 use Filament\Tables;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Builder;
+use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
 
 class UserResource extends Resource
 {
@@ -37,6 +40,17 @@ class UserResource extends Resource
             ->schema([
                 Forms\Components\Section::make('Pengguna')
                     ->schema([
+                        Forms\Components\Grid::make()
+                            ->schema([
+                                Forms\Components\FileUpload::make('avatar')
+                                    ->default(fn($record) => $record?->avatar ? asset('storage/' . $record->avatar) : null)
+                                    ->hiddenLabel()
+                                    ->directory('avatars')
+                                    ->avatar()
+                                    ->visibility('public')
+                                    ->alignCenter(),
+                            ])->columns(1),
+
                         Forms\Components\TextInput::make('name')
                             ->label('Nama Lengkap')
                             ->placeholder('Masukkan nama pengguna')
@@ -83,42 +97,7 @@ class UserResource extends Resource
                                         'pelanggan' => 'pelanggan',
                                         'pelayan' => 'pelayan',
                                     ]),
-
-                                Forms\Components\FileUpload::make('avatar')
-                                    ->label('Foto Profil (Avatar)')
-                                    ->directory('avatars')
-                                    ->image()
-                                    ->imageEditor()
-                                    ->imageEditorAspectRatios([
-                                        '16:9',
-                                        '4:3',
-                                        '1:1',
-                                    ])
                             ])->columns(1),
-                    ])->columns(2),
-            ]);
-    }
-
-    public static function infolist(Infolist $infolist): Infolist
-    {
-        return $infolist
-            ->schema([
-                Section::make('Detail Pengguna')
-                    ->schema([
-                        Grid::make()->schema([
-                            ImageEntry::make('avatar')
-                                ->hiddenLabel()
-                                ->circular()
-                                ->getStateUsing(function ($record) {
-                                    return $record->avatar ? asset('storage/' . $record->avatar) : 'https://gravatar.com/avatar/' . md5(strtolower(trim($record->email))) . '?s=1024';
-                                })->alignment(Alignment::Center)
-                        ])->columns(1),
-
-                        TextEntry::make('name')->label('Nama'),
-                        TextEntry::make('email')->label('Sure'),
-                        TextEntry::make('role')->label('Level'),
-                        TextEntry::make('created_at')->label('Tanggal Buat')
-                            ->getStateUsing(fn($record) => \Carbon\Carbon::parse($record->created_at)->diffForHumans()),
                     ])->columns(2),
             ]);
     }
@@ -179,6 +158,52 @@ class UserResource extends Resource
                     Tables\Actions\DeleteBulkAction::make(),
                 ]),
             ]);
+    }
+
+    public static function infolist(Infolist $infolist): Infolist
+    {
+        return $infolist
+            ->schema([
+                Section::make('Detail Pengguna')
+                    ->schema([
+                        Grid::make()->schema([
+                            ImageEntry::make('avatar')
+                                ->hiddenLabel()
+                                ->circular()
+                                ->getStateUsing(function ($record) {
+                                    return $record->avatar ? asset('storage/' . $record->avatar) : 'https://gravatar.com/avatar/' . md5(strtolower(trim($record->email))) . '?s=1024';
+                                })->alignment(Alignment::Center)
+                        ])->columns(1),
+
+                        TextEntry::make('name')->label('Nama'),
+                        TextEntry::make('email')->label('Sure'),
+                        TextEntry::make('role')->label('Level'),
+                        TextEntry::make('created_at')->label('Tanggal Buat')
+                            ->getStateUsing(fn($record) => \Carbon\Carbon::parse($record->created_at)->diffForHumans()),
+                    ])->columns(2),
+            ]);
+    }
+
+    public static function getGlobalSearchResultTitle(Model $record): string
+    {
+        return $record->name;
+    }
+
+    public static function getGloballySearchableAttributes(): array
+    {
+        return ['name', 'role', 'email'];
+    }
+
+    public static function getGlobalSearchResultDetails(Model $record): array
+    {
+        return [
+            'Email' => $record->email
+        ];
+    }
+
+    public static function getGlobalSearchEloquentQuery(): Builder
+    {
+        return parent::getGlobalSearchEloquentQuery();
     }
 
     public static function getRelations(): array
