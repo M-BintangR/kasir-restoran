@@ -197,8 +197,14 @@ class UserResource extends Resource
     public static function getGlobalSearchResultDetails(Model $record): array
     {
         return [
-            'Email' => $record->email
+            'Email' => $record->email,
+            'Level' => $record->role,
         ];
+    }
+
+    public static function getNavigationBadge(): ?string
+    {
+        return static::getModel()::count();
     }
 
     public static function getGlobalSearchEloquentQuery(): Builder

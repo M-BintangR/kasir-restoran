@@ -2,6 +2,9 @@
 
 namespace App\Providers\Filament;
 
+use App\Filament\Pages\Tenancy\EditTeamProfile;
+use App\Filament\Pages\Tenancy\RegisterTeam;
+use App\Models\Team;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
@@ -46,6 +49,9 @@ class AdminPanelProvider extends PanelProvider
             ->favicon(asset('ryoogen/favicon.ico'))
             ->brandLogoHeight(1)
             ->spa()
+            ->tenant(Team::class, ownershipRelationship: 'team')
+            ->tenantRegistration(RegisterTeam::class)
+            ->tenantProfile(EditTeamProfile::class)
 
             // NOT CUSTOM
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\\Filament\\Resources')
