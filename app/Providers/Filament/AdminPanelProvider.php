@@ -9,6 +9,7 @@ use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
 use Filament\Pages;
+use Filament\Pages\Auth\Register;
 use Filament\Panel;
 use Filament\PanelProvider;
 use Filament\Support\Colors\Color;
@@ -44,14 +45,12 @@ class AdminPanelProvider extends PanelProvider
             ->navigationGroups([
                 'Master',
             ])
+            ->registration()
             ->brandLogo(asset('ryoogen/logo-ryoogen-light.svg'))
             ->darkModeBrandLogo(asset('ryoogen/logo-ryoogen-dark.svg'))
             ->favicon(asset('ryoogen/favicon.ico'))
             ->brandLogoHeight(1)
             ->spa()
-            ->tenant(Team::class, ownershipRelationship: 'team')
-            ->tenantRegistration(RegisterTeam::class)
-            ->tenantProfile(EditTeamProfile::class)
 
             // NOT CUSTOM
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\\Filament\\Resources')

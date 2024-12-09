@@ -7,6 +7,7 @@ use Filament\Models\Contracts\FilamentUser;
 use Filament\Models\Contracts\HasAvatar;
 use Filament\Models\Contracts\HasTenants;
 use Filament\Panel;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -18,35 +19,6 @@ use Laravel\Sanctum\HasApiTokens;
 class User extends Authenticatable implements FilamentUser, HasAvatar, HasTenants
 {
     use HasApiTokens, HasFactory, Notifiable;
-
-    // TENANT
-    public function teams(): BelongsToMany
-    {
-        return $this->belongsToMany(Team::class);
-    }
-
-    public function getTenants(Panel $panel): Collection
-    {
-        return $this->teams;
-    }
-
-    public function canAccessTenant(Model $tenant): bool
-    {
-        return $this->teams()->whereKey($tenant)->exists();
-    }
-
-    // AVATAR
-    public function canAccessPanel(Panel $panel): bool
-    {
-        return 'admin';
-    }
-
-    public function getFilamentAvatarUrl(): ?string
-    {
-        return $this->avatar
-            ? url('storage/' . $this->avatar)
-            : 'https://gravatar.com/avatar/' . md5(strtolower(trim($this->email))) . '?s=1024';
-    }
 
     /**
      * The attributes that are mass assignable.
@@ -80,4 +52,33 @@ class User extends Authenticatable implements FilamentUser, HasAvatar, HasTenant
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    // AVATAR
+    public function canAccessPanel(Panel $panel): bool
+    {
+        return 'admin';
+    }
+
+    public function getFilamentAvatarUrl(): ?string
+    {
+        return $this->avatar
+            ? url('storage/' . $this->avatar)
+            : 'https://gravatar.com/avatar/' . md5(strtolower(trim($this->email))) . '?s=1024';
+    }
+
+    // TENANT
+    public function getTenants(Panel $panel): Collection
+    {
+        return $this->teams;
+    }
+
+    public function teams(): BelongsToMany
+    {
+        return $this->belongsToMany(Team::class);
+    }
+
+    public function canAccessTenant(Model $tenant): bool
+    {
+        return $this->teams->contains($tenant);
+    }
 }

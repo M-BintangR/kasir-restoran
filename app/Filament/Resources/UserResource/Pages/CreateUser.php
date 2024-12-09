@@ -4,6 +4,7 @@ namespace App\Filament\Resources\UserResource\Pages;
 
 use App\Filament\Resources\UserResource;
 use Filament\Actions\CreateAction;
+use Filament\Facades\Filament;
 use Filament\Resources\Pages\CreateRecord;
 
 class CreateUser extends CreateRecord
@@ -17,7 +18,7 @@ class CreateUser extends CreateRecord
                 ->label('Kembali')
                 ->icon('heroicon-o-arrow-left')
                 ->button()
-                ->url(fn(): string => route('filament.admin.resources.users.index'))
+                ->url(fn(): string => route('filament.admin.resources.users.index', ['tenant' => Filament::getTenant()]))
         ];
     }
 }

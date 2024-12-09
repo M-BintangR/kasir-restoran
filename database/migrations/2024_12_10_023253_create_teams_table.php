@@ -18,7 +18,6 @@ return new class extends Migration
             $table->timestamps();
         });
 
-        // TEAM USER FOR TENANT
         Schema::create('team_user', function (Blueprint $table) {
             $table->id();
             $table->foreignId('team_id')->constrained();
