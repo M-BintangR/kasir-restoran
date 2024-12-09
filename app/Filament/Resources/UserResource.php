@@ -150,11 +150,13 @@ class UserResource extends Resource
 
                 Tables\Columns\TextColumn::make('created_at')
                     ->label('Tanggal Buat')
+                    ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true)
                     ->getStateUsing(fn($record) => \Carbon\Carbon::parse($record->created_at)->format('d/m/Y')),
 
                 Tables\Columns\TextColumn::make('updated_at')
                     ->label('Tanggal Update')
+                    ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true)
                     ->getStateUsing(fn($record) => \Carbon\Carbon::parse($record->updated_at)->format('d/m/Y')),
             ])
