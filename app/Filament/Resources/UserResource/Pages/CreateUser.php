@@ -21,4 +21,9 @@ class CreateUser extends CreateRecord
                 ->url(fn(): string => route('filament.admin.resources.users.index', ['tenant' => Filament::getTenant()]))
         ];
     }
+
+    protected function getRedirectUrl(): string
+    {
+        return $this->getResource()::getUrl('index');
+    }
 }

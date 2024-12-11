@@ -14,17 +14,6 @@ class EditUser extends EditRecord
 {
     protected static string $resource = UserResource::class;
 
-    protected function mutateFormDataBeforeSave(array $data): array
-    {
-        if (empty($data['password'])) {
-            unset($data['password']);
-        } else {
-            $data['password'] = Hash::make($data['password']);
-        }
-
-        return $data;
-    }
-
     protected function getHeaderActions(): array
     {
         return [
@@ -34,5 +23,10 @@ class EditUser extends EditRecord
                 ->button()
                 ->url(fn(): string => route('filament.admin.resources.users.index', ['tenant' => Filament::getTenant()]))
         ];
+    }
+
+    protected function getRedirectUrl(): string
+    {
+        return $this->getResource()::getUrl('index');
     }
 }
