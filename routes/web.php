@@ -13,4 +13,4 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::redirect('/', 'filament.admin.auth.login');
+Route::redirect('/', '/admin/login');
