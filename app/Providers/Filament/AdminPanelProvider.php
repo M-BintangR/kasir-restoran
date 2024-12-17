@@ -52,6 +52,7 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->navigationGroups([
                 'Master',
+                'Setting'
             ])
             ->brandLogo(asset('ryoogen/logo-ryoogen-light.svg'))
             ->darkModeBrandLogo(asset('ryoogen/logo-ryoogen-dark.svg'))
