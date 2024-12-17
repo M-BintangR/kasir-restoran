@@ -2,15 +2,11 @@
 
 namespace App\Providers\Filament;
 
-use App\Filament\Pages\Tenancy\EditTeamProfile;
-use App\Filament\Pages\Tenancy\RegisterTeam;
-use App\Models\Team;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
 use Filament\Navigation\MenuItem;
 use Filament\Pages;
-use Filament\Pages\Auth\Register;
 use Filament\Panel;
 use Filament\PanelProvider;
 use Filament\Support\Colors\Color;
@@ -42,6 +38,7 @@ class AdminPanelProvider extends PanelProvider
                     ->icon('heroicon-o-cog-6-tooth')
                     ->url('/app')
             ])
+            ->viteTheme('resources/css/filament/admin/theme.css')
             ->colors([
                 'danger' => Color::Red,
                 'gray' => Color::Slate,
@@ -58,7 +55,6 @@ class AdminPanelProvider extends PanelProvider
             ->darkModeBrandLogo(asset('ryoogen/logo-ryoogen-dark.svg'))
             ->favicon(asset('ryoogen/favicon.ico'))
             ->brandLogoHeight(1)
-            ->spa()
 
             // NOT CUSTOM
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\\Filament\\Resources')
