@@ -31,7 +31,6 @@ class AdminPanelProvider extends PanelProvider
             ->login()
 
             // CUSTOM
-            ->profile()
             ->userMenuItems([
                 MenuItem::make()
                     ->label('App Panel')
