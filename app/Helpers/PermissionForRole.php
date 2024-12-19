@@ -8,6 +8,7 @@ class PermissionForRole
         /**
          *  USER MODEL
          */
+
         'user-view',
         'user-create',
         'user-update',
