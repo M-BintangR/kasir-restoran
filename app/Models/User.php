@@ -29,7 +29,6 @@ class User extends Authenticatable implements FilamentUser, HasAvatar, HasTenant
     protected $fillable = [
         'name',
         'email',
-        'role',
         'avatar',
         'password',
     ];
@@ -57,7 +56,7 @@ class User extends Authenticatable implements FilamentUser, HasAvatar, HasTenant
     // AVATAR
     public function canAccessPanel(Panel $panel): bool
     {
-        return 'admin';
+        return true;
     }
 
     public function getFilamentAvatarUrl(): ?string
@@ -81,5 +80,10 @@ class User extends Authenticatable implements FilamentUser, HasAvatar, HasTenant
     public function canAccessTenant(Model $tenant): bool
     {
         return $this->teams->contains($tenant);
+    }
+
+    public function getRoleAttribute()
+    {
+        return $this->getRoleNames();
     }
 }

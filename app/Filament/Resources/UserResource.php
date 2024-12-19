@@ -25,15 +25,25 @@ class UserResource extends Resource
 {
     protected static ?string $model = User::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-user';
+    public static function isScopedToTenant(): bool
+    {
+        return true;
+    }
 
-    protected static ?string $navigationLabel = 'Pengguna';
+    public static function getNavigationIcon(): ?string
+    {
+        return  config('ryoogen.users.resource.icon');
+    }
 
-    protected static ?string $modelLabel = 'Pengguna';
+    public static function getLabel(): string
+    {
+        return config('ryoogen.users.resource.label');
+    }
 
-    protected static ?string $navigationGroup = 'Master';
-
-    protected static ?int $navigationSort = 1;
+    public static function getPluralLabel(): string
+    {
+        return config('ryoogen.users.resource.labels');
+    }
 
     public static function form(Form $form): Form
     {
@@ -41,17 +51,6 @@ class UserResource extends Resource
             ->schema([
                 Forms\Components\Section::make('Pengguna')
                     ->schema([
-                        Forms\Components\Grid::make()
-                            ->schema([
-                                Forms\Components\FileUpload::make('avatar')
-                                    ->default(fn($record) => $record?->avatar ? asset('storage/' . $record->avatar) : null)
-                                    ->hiddenLabel()
-                                    ->directory('avatars')
-                                    ->avatar()
-                                    ->visibility('public')
-                                    ->alignCenter(),
-                            ])->columns(1),
-
                         Forms\Components\TextInput::make('name')
                             ->label('Nama Lengkap')
                             ->placeholder('Masukkan nama pengguna')
@@ -94,12 +93,17 @@ class UserResource extends Resource
                                 Forms\Components\Select::make('role')
                                     ->label('Level Pengguna')
                                     ->required()
-                                    ->options([
-                                        'admin' => 'admin',
-                                        'kasir' => 'kasir',
-                                        'pelanggan' => 'pelanggan',
-                                        'pelayan' => 'pelayan',
-                                    ]),
+                                    ->relationship('roles', 'name'),
+                            ])->columns(1),
+
+                        Forms\Components\Grid::make()
+                            ->schema([
+                                Forms\Components\FileUpload::make('avatar')
+                                    ->default(fn($record) => $record?->avatar ? asset('storage/' . $record->avatar) : null)
+                                    ->label('Avatar')
+                                    ->directory('avatars')
+                                    ->visibility('public')
+                                    ->alignCenter(),
                             ])->columns(1),
                     ])->columns(2),
             ]);

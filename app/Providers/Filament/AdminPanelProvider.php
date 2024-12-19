@@ -3,11 +3,17 @@
 namespace App\Providers\Filament;
 
 use Althinect\FilamentSpatieRolesPermissions\FilamentSpatieRolesPermissionsPlugin;
+use Althinect\FilamentSpatieRolesPermissions\Resources\PermissionResource;
+use Althinect\FilamentSpatieRolesPermissions\Resources\RoleResource;
+use App\Filament\Resources\UserResource;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
-use Filament\Navigation\MenuItem;
+use Filament\Navigation\NavigationBuilder;
+use Filament\Navigation\NavigationGroup;
+use Filament\Navigation\NavigationItem;
 use Filament\Pages;
+use Filament\Pages\Dashboard;
 use Filament\Panel;
 use Filament\PanelProvider;
 use Filament\Support\Colors\Color;
@@ -31,15 +37,34 @@ class AdminPanelProvider extends PanelProvider
             ->path('admin')
             ->login()
 
-            //PERMISSION
+            // PERMISSION
             ->plugin(FilamentSpatieRolesPermissionsPlugin::make())
+
+            // NAVIGATION
+            ->navigation(function (NavigationBuilder $builder): NavigationBuilder {
+                return $builder->groups([
+                    NavigationGroup::make()
+                        ->items([
+                            NavigationItem::make('Beranda')
+                                ->icon('heroicon-o-home')
+                                ->isActiveWhen(fn(): bool => request()->routeIs('filament.admin.pages.dashboard'))
+                                ->url(fn(): string => Dashboard::getUrl()),
+                        ]),
+                    NavigationGroup::make('Pengaturan')
+                        ->items([
+                            ...UserResource::getNavigationItems(),
+                            ...PermissionResource::getNavigationItems(),
+                            ...RoleResource::getNavigationItems(),
+                        ]),
+                ]);
+            })
 
             // CUSTOM
             ->userMenuItems([
-                MenuItem::make()
-                    ->label('App Panel')
-                    ->icon('heroicon-o-cog-6-tooth')
-                    ->url('/app')
+                // MenuItem::make()
+                //     ->label('App Panel')
+                //     ->icon('heroicon-o-cog-6-tooth')
+                //     ->url('/app')
             ])
             ->viteTheme('resources/css/filament/admin/theme.css')
             ->colors([
@@ -49,10 +74,6 @@ class AdminPanelProvider extends PanelProvider
                 'primary' => Color::Lime,
                 'success' => Color::Emerald,
                 'warning' => Color::Orange,
-            ])
-            ->navigationGroups([
-                'Master',
-                'Setting'
             ])
             ->brandLogo(asset('ryoogen/logo-ryoogen-light.svg'))
             ->darkModeBrandLogo(asset('ryoogen/logo-ryoogen-dark.svg'))
