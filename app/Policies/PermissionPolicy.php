@@ -3,7 +3,6 @@
 namespace App\Policies;
 
 use App\Models\User;
-use Illuminate\Auth\Access\Response;
 use Spatie\Permission\Models\Permission;
 
 class PermissionPolicy
@@ -13,7 +12,7 @@ class PermissionPolicy
      */
     public function viewAny(User $user): bool
     {
-        return $user->can('permission-view') ? true : false;
+        return auth()->user()->can('permission-view') ? true : false;
     }
 
     /**
@@ -21,7 +20,7 @@ class PermissionPolicy
      */
     public function view(User $user, Permission $permission): bool
     {
-        return $user->can('permission-view') ? true : false;
+        return auth()->user()->can('permission-view') ? true : false;
     }
 
     /**
@@ -29,7 +28,7 @@ class PermissionPolicy
      */
     public function create(User $user): bool
     {
-        return $user->can('permission-create') ? true : false;
+        return auth()->user()->can('permission-create') ? true : false;
     }
 
     /**
@@ -37,7 +36,7 @@ class PermissionPolicy
      */
     public function update(User $user, Permission $permission): bool
     {
-        return $user->can('permission-update') ? true : false;
+        return auth()->user()->can('permission-update') ? true : false;
     }
 
     /**
@@ -45,7 +44,7 @@ class PermissionPolicy
      */
     public function delete(User $user, Permission $permission): bool
     {
-        return $user->can('permission-delete') ? true : false;
+        return auth()->user()->can('permission-delete') ? true : false;
     }
 
     /**
@@ -53,7 +52,7 @@ class PermissionPolicy
      */
     public function restore(User $user, Permission $permission): bool
     {
-        return $user->can('permission-restore') ? true : false;
+        return auth()->user()->can('permission-restore') ? true : false;
     }
 
     /**
@@ -61,6 +60,6 @@ class PermissionPolicy
      */
     public function forceDelete(User $user, Permission $permission): bool
     {
-        return $user->can('permission-force-delete') ? true : false;
+        return auth()->user()->can('permission-force-delete') ? true : false;
     }
 }

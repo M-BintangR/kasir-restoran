@@ -2,6 +2,18 @@
 
 namespace App\Helpers;
 
+/**
+ *  ********************
+ *  Ryoogen Const Helpers
+ *  ********************
+ *
+ *  helpers class for our permission constants
+ *
+ * by Ryoogen Media
+ * https://github.com/ryoogenmedia
+ */
+
+
 class AppConst
 {
     public const ROLES = [

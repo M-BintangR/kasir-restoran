@@ -2,6 +2,19 @@
 
 namespace App\Helpers;
 
+/**
+ *  ********************
+ *  Ryoogen Const Helpers
+ *  ********************
+ *
+ *  helpers class for application role
+ *  based permission constants
+ *
+ * by Ryoogen Media
+ * https://github.com/ryoogenmedia
+ */
+
+
 class PermissionForRole
 {
     public const ADMIN = [

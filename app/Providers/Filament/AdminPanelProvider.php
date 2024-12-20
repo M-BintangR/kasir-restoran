@@ -61,10 +61,11 @@ class AdminPanelProvider extends PanelProvider
 
             // CUSTOM
             ->userMenuItems([
+                // Uncomment and customize if needed
                 // MenuItem::make()
                 //     ->label('App Panel')
                 //     ->icon('heroicon-o-cog-6-tooth')
-                //     ->url('/app')
+                //     ->url('/app'),
             ])
             ->viteTheme('resources/css/filament/admin/theme.css')
             ->colors([
@@ -102,8 +103,13 @@ class AdminPanelProvider extends PanelProvider
                 DisableBladeIconComponents::class,
                 DispatchServingFilamentEvent::class,
             ])
+
             ->authMiddleware([
                 Authenticate::class,
+            ])
+
+            ->plugins([
+                FilamentSpatieRolesPermissionsPlugin::make(),
             ]);
     }
 }
